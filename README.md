@@ -7,6 +7,8 @@ For diabetic patients, identifying those at risk is complex due to various facto
 
 This project addresses this by using a dataset of over 1,00,000 instances to build a predictive model that classifies whether a patient is at high or low risk of readmission.
 
+**Dataset Used:** https://www.kaggle.com/datasets/brandao/diabetes?select=diabetic_data.csv
+
 **End-to-End Project Overview**
 
 
