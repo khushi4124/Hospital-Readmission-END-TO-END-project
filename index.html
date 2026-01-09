@@ -1,0 +1,326 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>Hospital Readmission</title>
+        <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f7f6; }
+        form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #333; }
+        select, input { width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; }
+</style>
+    </head>
+<body>
+    <h1 style="font-family: 'Times New Roman', Times, serif;text-align: center;">Hospital Readmission Risk Predictor</h1>
+    <h2 style="color:blue ; text-align:center">
+    {{ prediction_text }}
+    </h2>
+    <form action="/predict" method="POST">
+        <label>AGE</label>
+        <select name="age">
+            <option value="[0-10)">0-10</option>
+            <option value="[10-20)">10-20</option>
+            <option value="[20-30)">20-30</option>
+            <option value="[30-40)">30-40</option>
+            <option value="[40-50)">40-50</option>
+            <option value="[50-60)">50-60</option>
+            <option value="[60-70)">60-70</option>
+            <option value="[70-80)">70-80</option>
+            <option value="[80-90)">80-90</option>
+            <option value="[90-100)">90-100</option>
+        </select>
+        <br><br>
+        <label>GENDER</label>
+        <select name="gender">
+            <option value="Male">MALE</option>
+            <option value="Female">FEMALE</option>
+        </select>
+        <br><br>
+        <label>RACE</label>
+        <select name="race">
+            <option value="Caucasian">CAUCASIAN</option>
+            <option value="AfricanAmerican">AFRICAN AMERICAN</option>
+            <option value="Hispanic">HISPANIC</option>
+            <option value="Asian">ASIAN</option>
+            <option value="Other">OTHER</option>
+        </select>
+        <br><br>
+        <label>ADMISSION TYPE</label>
+        <select name="admission_type">
+        <option value="emergency">EMERGENCY (Emergency, Urgent, Trauma)</option>
+        <option value="routine">ROUTINE (Newborn, Elective)</option>
+        <option value="unknown">UNKNOWN</option>
+        </select>
+        <br><br>
+        <label>ADMISSION SOURCE</label>
+        <select name="admission_source">
+        <option value="referral">REFERRAL</option>
+        <option value="transfer">TRANSFER CASE</option>
+        <option value="emergency">EMERGENCY</option>
+        <option value="routine">NORMAL DELIVERY</option>
+        <option value="court enforcement">COURT ENFORCEMENT</option>
+        <option value="unknown">UNKNOWN</option>
+        </select>
+        <br><br>
+        <label>MEDICAL SPECIALTY</label>
+        <select name="medical_specialty">
+            <option value="InternalMedicine">INTERNAL MEDICINE</option>
+            <option value="Emergency/Trauma">EMERGENCY/TRAUMA</option>
+            <option value="Family/GeneralPractice">FAMILY/GENERAL PRACTICE</option>
+            <option value="Cardiology">CARDIOLOGY</option>
+            <option value="Surgery-General">GENERAL SURGERY</option>
+            <option value="Nephrology">NEPHROLOGY</option>
+            <option value="Orthopedics">ORTHOPEDICS</option>
+            <option value="Psychiatry">PSYCHIATRY</option>
+            <option value="Gastroenterology">GASTROENTEROLOGY</option>
+            <option value="ObstetricsandGynecology">OBSTETRICS AND GYNECOLOGY</option>
+            <option value="Radiologist">RADIOLOGY</option>
+            <option value="Urology">UROLOGY</option>
+            <option value="Pulmonology">PULMONOLOGY</option>
+            <option value="Surgery-Cardiovascular/Thoracic">SURGERY-CARDIOVASCULAR/THORACIC</option>
+            <option value="Surgery-Vascular">VASCULAR SURGERY</option>
+            <option value="Surgery-Neuro">NEURO SURGERY</option>
+            <option value="PhysicalMedicineandRehabilitation">PHYSICAL MEDICINE AND REHABILITATION</option>
+            <option value="Oncology">ONCOLOGY</option>
+            <option value="Pediatrics">PEDIATRICS</option>
+            <option value="Neurology">NEUROLOGY</option>
+            <option value="Endocrinology">ENDOCRINOLOGY</option>
+            <option value="Otolaryngology">OTOLARYNGOLOGY</option>
+            <option value="Podiatry">PODIATRY</option>
+            <option value="other">OTHERS</option>
+        </select>
+        <br><br>
+        <label>FIRST DIAGNOSIS</label>
+        <select name="diag_1">
+            <option value="Circulatory">CIRCULATORY</option>
+            <option value="Respiratory">RESPIRATORY</option>
+            <option value="Digestive">DIGESTIVE</option>
+            <option value="Diabetes">DIABETES</option>
+            <option value="Injury">INJURY</option>
+            <option value="Genitourinary">GENITOURINARY</option>
+            <option value="Muscoloskeletal">MUSCOLOSKELETAL</option>
+            <option value="Neoplasms">NEOPSALMS</option>
+        </select>
+        <br><br>
+        <label>SECOND DIAGNOSIS</label>
+        <select name="diag_2">
+            <option value="Circulatory">CIRCULATORY</option>
+            <option value="Respiratory">RESPIRATORY</option>
+            <option value="Digestive">DIGESTIVE</option>
+            <option value="Diabetes">DIABETES</option>
+            <option value="Injury">INJURY</option>
+            <option value="Genitourinary">GENITOURINARY</option>
+            <option value="Muscoloskeletal">MUSCOLOSKELETAL</option>
+            <option value="Neoplasms">NEOPSALMS</option>
+        </select>
+        <br><br>
+        <label>THIRD DIAGNOSIS</label>
+        <select name="diag_3">
+            <option value="Circulatory">CIRCULATORY</option>
+            <option value="Respiratory">RESPIRATORY</option>
+            <option value="Digestive">DIGESTIVE</option>
+            <option value="Diabetes">DIABETES</option>
+            <option value="Injury">INJURY</option>
+            <option value="Genitourinary">GENITOURINARY</option>
+            <option value="Muscoloskeletal">MUSCOLOSKELETAL</option>
+            <option value="Neoplasms">NEOPSALMS</option>
+        </select>
+        <br><br>
+        <label>DISCHARGE RESULT</label>
+        <select name="discharge_result">
+            <option value="discharged home">DISCHARGED HOME</option>
+            <option value="transferred">TRANSFERRED TO SOME OTHER FACILITY</option>
+            <option value="hospice">RECEIVING MEDICAL ATTENTION AT HOME</option>
+            <option value="expired">EXPIRED</option>
+            <option value="left">LEFT AGAINST MEDICAL ADVISE</option>
+            <option value="unknown">UNKNOWN</option>
+        </select>
+        <br><br>
+        <label>DO YOU TAKE DIABETES MEDICINE ?</label>
+        <select name="diabetesMed">
+            <option value="Yes">YES</option>
+            <option value="No">NO</option>
+        </select>
+        <br><br>
+        <label>WAS THERE ANY CHANGE IN THE MEDICATIONS DURING HOSPITAL STAY ?</label>
+        <select name="change">
+            <option value="Ch">YES</option>
+            <option value="No">NO</option>
+        </select>
+        <br><br>
+        <label>GLUCOSE SERUM TEST RESULT</label>
+        <select name="max_glu_serum">
+            <option value="None">TEST WAS NOT CONDUCTED</option>
+            <option value="Norm">NORMAL</option>
+            <option value=">200">>200</option>
+            <option value=">300">>300</option>
+        </select>
+        <br><br>
+        <label>HEMOGLOBIN A1C TEST RESULTS</label>
+        <select name="A1Cresult">
+            <option value="None">TEST WAS NOT CONDUCTED</option>
+            <option value="Norm">NORMAL</option>
+            <option value=">7">>7</option>
+            <option value=">8">>8</option>
+        </select>
+        <br><br>
+        <label>INSULIN DOSAGE</label>
+        <select name="insulin">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+        <br><br>
+        <div>
+        <label>METFORMIN</label>
+        <select name="metformin">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>GLIPIZIDE</label>
+        <select name="glipizide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>GLYBURIDE</label>
+        <select name="glyburide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>GLIMEPIRIDE</label>
+        <select name="glimepiride">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>PIOGLITAZONE</label>
+        <select name="pioglitazone">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>ROSIGLITAZONE</label>
+        <select name="rosiglitazone">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>ACARBOSE</label>
+        <select name="acarbose">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>REPAGLINIDE</label>
+        <select name="repaglinide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>NATEGLINIDE</label>
+        <select name="nateglinide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>CHLORPROPAMIDE</label>
+        <select name="chlorpropamide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>TOLAZAMIDE</label>
+        <select name="tolazamide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>TOLBUTAMIDE</label>
+        <select name="tolbutamide">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>MIGLITOL</label>
+        <select name="miglitol">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+
+    <div>
+        <label>GLYBURIDE-METFORMIN</label>
+        <select name="glyburide-metformin">
+            <option value="No">No</option>
+            <option value="Steady">Steady</option>
+            <option value="Up">Up</option>
+            <option value="Down">Down</option>
+        </select>
+    </div>
+</div>
+        <label>TIME IN HOSPITAL (DAYS)</label>
+        <input type="number" name="time_in_hospital" required>
+        <br><br>
+        <label>TOTAL PRIOR VISITS</label>
+        <input type="number" name="previous_hospital_visits" required>
+        <br><br>
+        <label>TOTAL PROCEDURES CONDUCTED (LABS + MISCELLENEOUS)</label>
+        <input type="number" name="total_procedures" required>
+        <br><br>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer;">Predict Readmission Risk</button>
+    </form>
+</body>
+</html>
